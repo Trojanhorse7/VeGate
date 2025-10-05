@@ -29,11 +29,16 @@ export function useBill() {
       setIsCreating(true);
 
       try {
+        console.log("Creating bill with address:", address);
+        console.log("Bill params:", params);
+
         // Generate bill ID on frontend
         const billId = generateBillId(address);
+        console.log("Generated billId:", billId);
 
         // Create bill on-chain (pass address as first parameter)
         const { txId } = await createBill(address, params);
+        console.log("Transaction ID:", txId);
 
         // Save to backend
         const response = await fetch("/api/bills/create", {
@@ -70,9 +75,10 @@ export function useBill() {
         let errorDescription = error?.message || "Please try again";
         
         if (error?.message?.includes("wallet not connected") || 
-            error?.message?.includes("not available")) {
+            error?.message?.includes("not available") ||
+            error?.message?.includes("Connex")) {
           errorMessage = "Wallet Not Connected";
-          errorDescription = "Please click the wallet button in the top right corner to connect your VeWorld wallet";
+          errorDescription = "Please connect your VeWorld wallet using the button in the top right corner";
         } else if (error?.message?.includes("rejected") || error?.message?.includes("denied")) {
           errorMessage = "Transaction Rejected";
           errorDescription = "You rejected the transaction in your wallet";
