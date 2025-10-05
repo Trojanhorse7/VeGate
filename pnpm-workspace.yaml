@@ -1,0 +1,5 @@
+packages:
+  - 'apps/*'
+  - 'packages/contract'
+  - 'packages/sdk'
+  - 'packages/database'

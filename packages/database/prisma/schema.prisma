@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Bill {
+  id            String    @id @default(cuid())
+  billId        String    @unique // On-chain bill ID (bytes32)
+  receiver      String
+  token         String
+  amount        String    // BigInt as string
+  paid          Boolean   @default(false)
+  socialImpact  Boolean   @default(false)
+  category      String    // Donation, Subscription, E-commerce, Utility
+  createdBy     String
+  paidBy        String?
+  payer         String?
+  txHash        String?   @unique
+  b3trReward    String?
+  qrCodeUrl     String?
+  qrCodeData    String?   // Base64 encoded QR
+  metadata      Json?     // Additional metadata
+  createdAt     DateTime  @default(now())
+  paidAt        DateTime?
+  expiresAt     DateTime?
+  
+  payments      Payment[]
+  bridgeInfo    BridgeTransaction?
+  
+  @@index([createdBy])
+  @@index([paidBy])
+  @@index([paid])
+  @@index([socialImpact])
+  @@index([category])
+}
+
+model Payment {
+  id            String   @id @default(cuid())
+  billId        String
+  bill          Bill     @relation(fields: [billId], references: [id], onDelete: Cascade)
+  payer         String
+  txHash        String   @unique
+  amount        String
+  token         String
+  b3trReward    String
+  gasSponsored  Boolean  @default(false)
+  timestamp     DateTime @default(now())
+  
+  @@index([payer])
+  @@index([billId])
+}
+
+model BridgeTransaction {
+  id              String   @id @default(cuid())
+  billId          String   @unique
+  bill            Bill     @relation(fields: [billId], references: [id], onDelete: Cascade)
+  sourceChain     String   // ethereum, bsc, polygon, etc.
+  sourceToken     String   // Token address on source chain
+  sourceAmount    String
+  sourceTxHash    String?
+  targetChain     String   @default("vechain")
+  targetToken     String   // Token address on VeChain
+  bridgeId        String   @unique
+  wanBridgeId     String?  // WanBridge transaction ID
+  status          String   @default("pending") // pending, bridging, completed, failed
+  errorMessage    String?
+  estimatedTime   Int?     // in seconds
+  actualTime      Int?
+  createdAt       DateTime @default(now())
+  completedAt     DateTime?
+  
+  @@index([status])
+  @@index([sourceChain])
+}
+
+model User {
+  id              String   @id @default(cuid())
+  wallet          String   @unique
+  totalRewards    String   @default("0")
+  billsCreated    Int      @default(0)
+  billsPaid       Int      @default(0)
+  socialImpactBills Int    @default(0)
+  lastActive      DateTime @default(now())
+  createdAt       DateTime @default(now())
+  
+  @@index([wallet])
+}
+
+model QRCode {
+  id            String   @id @default(cuid())
+  billId        String   @unique
+  standardUrl   String   // Standard QR code URL
+  brandedUrl    String?  // Branded QR code URL
+  logoUrl       String?  // Logo for branded QR
+  colorScheme   Json?    // Custom colors
+  createdAt     DateTime @default(now())
+}
+
+model Analytics {
+  id                  String   @id @default(cuid())
+  date                DateTime @default(now())
+  totalBills          Int      @default(0)
+  paidBills           Int      @default(0)
+  socialImpactBills   Int      @default(0)
+  totalVolume         String   @default("0")
+  totalRewards        String   @default("0")
+  uniqueUsers         Int      @default(0)
+  crossChainPayments  Int      @default(0)
+  
+  @@unique([date])
+}

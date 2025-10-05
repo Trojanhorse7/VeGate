@@ -1,0 +1,26 @@
+{
+  "name": "@vegate/contracts",
+  "version": "1.0.0",
+  "description": "VeGate Smart Contracts - VeChainThor deployment",
+  "private": true,
+  "scripts": {
+    "build": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:testnet": "hardhat run scripts/deploy-vechain.ts --network vechain_testnet",
+    "deploy:mainnet": "hardhat run scripts/deploy-vechain.ts --network vechain_mainnet",
+    "deploy": "npm run deploy:testnet",
+    "clean": "hardhat clean",
+    "verify": "hardhat verify"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.0",
+    "@openzeppelin/contracts": "^5.0.1",
+    "@types/node": "^20.0.0",
+    "@vechain/sdk-hardhat-plugin": "^1.0.0",
+    "@vechain/sdk-core": "^1.0.0",
+    "dotenv": "^16.4.0",
+    "hardhat": "^2.19.0",
+    "typescript": "^5.3.0"
+  }
+}

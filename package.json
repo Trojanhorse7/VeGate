@@ -1,0 +1,46 @@
+{
+  "name": "vegate-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "VeGate - Gasless payments on VeChainThor with B3TR rewards",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "db:generate": "turbo run db:generate",
+    "db:push": "turbo run db:push",
+    "deploy:contracts": "cd packages/contract && npm run deploy:testnet",
+    "clean": "turbo run clean"
+  },
+  "devDependencies": {
+    "@types/qrcode": "^1.5.5",
+    "turbo": "^1.11.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/vegate.git"
+  },
+  "keywords": [
+    "vegate",
+    "vechain",
+    "payments",
+    "blockchain",
+    "qr-code",
+    "b3tr",
+    "rewards",
+    "gasless"
+  ],
+  "dependencies": {
+    "qrcode": "^1.5.4"
+  }
+}
