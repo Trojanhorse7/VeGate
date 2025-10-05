@@ -36,6 +36,18 @@ export function CreateBillForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Extra validation
+    if (!isConnected || !address) {
+      alert(
+        'Please connect your VeWorld wallet first using the button in the top right corner'
+      );
+      return;
+    }
+
+    console.log('Submitting with address:', address);
+    console.log('Is connected:', isConnected);
+
     const bill = await create(formData);
     if (bill) {
       // Redirect to QR page or show modal

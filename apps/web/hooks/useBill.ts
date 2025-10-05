@@ -13,7 +13,7 @@ export interface CreateBillParams {
 }
 
 export function useBill() {
-  const { address } = useWallet();
+  const { address, connex } = useWallet();
   const [isCreating, setIsCreating] = useState(false);
   const [isPaying, setIsPaying] = useState(false);
 
@@ -26,18 +26,30 @@ export function useBill() {
         return null;
       }
 
+      if (!connex) {
+        toast.error("Wallet Not Ready", {
+          description: "Please wait for wallet connection to complete, then try again",
+        });
+        return null;
+      }
+
       setIsCreating(true);
 
       try {
         console.log("Creating bill with address:", address);
         console.log("Bill params:", params);
+        console.log("Connex available:", !!connex);
 
         // Generate bill ID on frontend
         const billId = generateBillId(address);
         console.log("Generated billId:", billId);
 
-        // Create bill on-chain (pass address as first parameter)
-        const { txId } = await createBill(address, params);
+        // Create bill on-chain - pass connex and userAddress
+        const { txId } = await createBill(params, { 
+          connex, 
+          userAddress: address,
+          network: "test"
+        });
         console.log("Transaction ID:", txId);
 
         // Save to backend
