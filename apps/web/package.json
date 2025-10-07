@@ -8,8 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-  "type-check": "tsc --noEmit",
-  "postinstall": "prisma generate"
+  "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@chakra-ui/icons": "2.1.1",
