@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useBill } from "@/hooks/useBill";
-import { useWallet } from "@/hooks/useWallet";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ConnectWallet } from "@/components/wallet/ConnectWallet";
-import { CheckCircle2, Coins } from "lucide-react";
-import { formatB3TR, calculatePotentialReward } from "@vegate/sdk";
+import { useEffect, useState } from 'react';
+import { useBill } from '@/hooks/useBill';
+import { useWallet } from '@/hooks/useWallet';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { ConnectWallet } from '@/components/wallet/ConnectWallet';
+import { CheckCircle2, Coins } from 'lucide-react';
+import { formatB3TR, calculatePotentialReward, formatVET } from '@vegate/sdk';
 
 interface PaymentPageProps {
   billId: string;
@@ -16,22 +16,22 @@ interface PaymentPageProps {
 
 export function PaymentPage({ billId }: PaymentPageProps) {
   const { isConnected } = useWallet();
-  const { pay, isPaying, fetch } = useBill();
+  const { pay, isPaying, fetchBill } = useBill();
   const [bill, setBill] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(billId).then((data) => {
+    fetchBill(billId).then((data) => {
       setBill(data);
       setIsLoading(false);
     });
-  }, [billId, fetch]);
+  }, [billId, fetchBill]);
 
   const handlePay = async () => {
     const result = await pay(billId);
     if (result) {
       // Refresh bill data
-      const updatedBill = await fetch(billId);
+      const updatedBill = await fetchBill(billId);
       setBill(updatedBill);
     }
   };
@@ -65,7 +65,10 @@ export function PaymentPage({ billId }: PaymentPageProps) {
           <div className="flex items-center justify-between">
             <CardTitle>Payment Details</CardTitle>
             {bill.paid ? (
-              <Badge variant="success" className="gap-1">
+              <Badge
+                variant="default"
+                className="bg-green-500 hover:bg-green-600 text-white gap-1"
+              >
                 <CheckCircle2 className="h-3 w-3" />
                 Paid
               </Badge>
@@ -78,7 +81,7 @@ export function PaymentPage({ billId }: PaymentPageProps) {
           <div className="space-y-4">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Amount</span>
-              <span className="font-semibold">{bill.amount} VTHO</span>
+              <span className="font-semibold">{formatVET(bill.amount)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Category</span>
@@ -108,12 +111,16 @@ export function PaymentPage({ billId }: PaymentPageProps) {
                 {formatB3TR(reward.amount)} B3TR
               </span>
             </div>
-            <p className="text-sm text-muted-foreground mt-2">{reward.multiplier}</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              {reward.multiplier}
+            </p>
           </div>
 
           {!isConnected ? (
             <div className="flex flex-col items-center gap-4 py-6">
-              <p className="text-sm text-muted-foreground">Connect your wallet to pay</p>
+              <p className="text-sm text-muted-foreground">
+                Connect your wallet to pay
+              </p>
               <ConnectWallet />
             </div>
           ) : bill.paid ? (
@@ -125,8 +132,13 @@ export function PaymentPage({ billId }: PaymentPageProps) {
               </p>
             </div>
           ) : (
-            <Button onClick={handlePay} disabled={isPaying} className="w-full" size="lg">
-              {isPaying ? "Processing..." : `Pay ${bill.amount} VTHO`}
+            <Button
+              onClick={handlePay}
+              disabled={isPaying}
+              className="w-full"
+              size="lg"
+            >
+              {isPaying ? 'Processing...' : `Pay ${formatVET(bill.amount)}`}
             </Button>
           )}
         </CardContent>

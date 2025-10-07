@@ -7,10 +7,10 @@ const prisma = new PrismaClient();
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { billId, receiver, token, amount, socialImpact, category, createdBy } = body;
+    const { billId, shortBillId, receiver, token, amount, socialImpact, category, createdBy } = body;
 
     // Validate input
-    if (!billId || !receiver || !token || !amount || !createdBy) {
+    if (!billId || !shortBillId || !receiver || !token || !amount || !createdBy) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -24,6 +24,7 @@ export async function POST(req: NextRequest) {
     const bill = await prisma.bill.create({
       data: {
         billId,
+        shortBillId,
         receiver,
         token,
         amount: amount.toString(),
@@ -53,6 +54,7 @@ export async function POST(req: NextRequest) {
       bill: {
         id: bill.id,
         billId: bill.billId,
+        shortBillId: bill.shortBillId,
         qrCodeUrl: bill.qrCodeUrl,
       },
     });

@@ -19,6 +19,7 @@ export function Footer() {
                   width={48}
                   height={48}
                   className="object-contain"
+                  style={{ width: 'auto', height: 'auto' }}
                   unoptimized
                 />
               </div>
@@ -32,7 +33,7 @@ export function Footer() {
             </p>
             <div className="flex items-center gap-4">
               <a
-                href="https://github.com/your-org/vegate"
+                href="https://github.com/Trojanhorse7/VeGate"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors"
@@ -103,7 +104,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li>
                 <a
-                  href="https://github.com/your-org/vegate/tree/main/packages/sdk"
+                  href="https://www.npmjs.com/package/@trojan06/vegate-sdk"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
@@ -113,16 +114,8 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <Link
-                  href="/docs"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Documentation
-                </Link>
-              </li>
-              <li>
                 <a
-                  href="https://github.com/your-org/vegate"
+                  href="https://github.com/Trojanhorse7/VeGate"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
@@ -130,14 +123,6 @@ export function Footer() {
                   GitHub
                   <ExternalLink className="w-3 h-3" />
                 </a>
-              </li>
-              <li>
-                <Link
-                  href="/api"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  API Reference
-                </Link>
               </li>
             </ul>
           </div>

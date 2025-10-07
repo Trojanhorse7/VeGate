@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Card,
@@ -40,16 +40,21 @@ export default function ScanQRPage() {
       try {
         // Extract bill ID from QR code data
         const data = result?.text || result;
+        let extractedBillId = data;
 
         // If it's a URL, extract the bill ID from it
         if (data.includes('/pay/')) {
-          const billIdFromUrl = data.split('/pay/')[1]?.split('?')[0];
-          if (billIdFromUrl) {
-            router.push(`/pay/${billIdFromUrl}`);
+          const match = data.split('/pay/')[1];
+          if (match) {
+            // Remove any query parameters or trailing slashes
+            extractedBillId = match.split('?')[0].split('/')[0];
           }
+        }
+
+        if (extractedBillId) {
+          router.push(`/pay/${extractedBillId}`);
         } else {
-          // Assume the QR code contains the bill ID directly
-          router.push(`/pay/${data}`);
+          setError('Could not extract bill ID from QR code');
         }
       } catch (err) {
         setError('Invalid QR code. Please try again.');
@@ -67,7 +72,32 @@ export default function ScanQRPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (billId.trim()) {
-      router.push(`/pay/${billId.trim()}`);
+      let extractedBillId = billId.trim();
+
+      // If the input contains a full URL, extract just the bill ID
+      if (extractedBillId.includes('/pay/')) {
+        const match = extractedBillId.split('/pay/')[1];
+        if (match) {
+          // Remove any query parameters or trailing slashes
+          extractedBillId = match.split('?')[0].split('/')[0];
+        }
+      } else if (
+        extractedBillId.startsWith('http://') ||
+        extractedBillId.startsWith('https://')
+      ) {
+        // Handle full URLs that might not have /pay/ yet
+        try {
+          const url = new URL(extractedBillId);
+          const pathParts = url.pathname.split('/').filter(Boolean);
+          if (pathParts[0] === 'pay' && pathParts[1]) {
+            extractedBillId = pathParts[1];
+          }
+        } catch (err) {
+          // If URL parsing fails, use as-is
+        }
+      }
+
+      router.push(`/pay/${extractedBillId}`);
     }
   };
 

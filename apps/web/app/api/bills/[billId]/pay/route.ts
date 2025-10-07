@@ -44,15 +44,24 @@ export async function POST(
       },
     });
 
-    // Update user stats
+    // Update user stats - fetch and manually calculate rewards
+    const existingUser = await prisma.user.findUnique({
+      where: { wallet: payer },
+    });
+    
+    let newRewards = b3trReward || "0";
+    if (existingUser && existingUser.totalRewards) {
+      newRewards = (BigInt(existingUser.totalRewards) + BigInt(b3trReward || "0")).toString();
+    }
+
     await prisma.user.upsert({
       where: { wallet: payer },
       update: {
         billsPaid: { increment: 1 },
-        totalRewards: {
-          increment: b3trReward || "0",
-        },
-        socialImpactBills: bill.socialImpact ? { increment: 1 } : undefined,
+        totalRewards: newRewards,
+        socialImpactBills: bill.socialImpact 
+          ? { increment: 1 } 
+          : undefined,
         lastActive: new Date(),
       },
       create: {
@@ -71,10 +80,20 @@ export async function POST(
         b3trReward,
       },
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error processing payment:", error);
+    
+    // Log detailed error for debugging
+    if (error.code === 'P2025') {
+      console.error("Bill not found:", params.billId);
+      return NextResponse.json(
+        { error: "Bill not found" },
+        { status: 404 }
+      );
+    }
+    
     return NextResponse.json(
-      { error: "Failed to process payment" },
+      { error: error.message || "Failed to process payment" },
       { status: 500 }
     );
   }

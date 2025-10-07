@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { generateQR, downloadQR } from "@vegate/sdk";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Download, Share2, Copy } from "lucide-react";
-import { toast } from "sonner";
+import { useState, useEffect } from 'react';
+import { generateBrandedQR, downloadQR, getShortBillId } from '@vegate/sdk';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Download, Share2, Copy } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface QRDisplayProps {
   billId: string;
@@ -13,35 +13,67 @@ interface QRDisplayProps {
 }
 
 export function QRDisplay({ billId, baseUrl }: QRDisplayProps) {
-  const [qrCode, setQrCode] = useState<string>("");
-  const paymentUrl = `${baseUrl || window.location.origin}/pay/${billId}`;
+  const [qrCode, setQrCode] = useState<string>('');
+  const [shortBillId, setShortBillId] = useState<string>('');
+  const [paymentUrl, setPaymentUrl] = useState<string>('');
 
   useEffect(() => {
-    generateQR(billId, baseUrl).then(setQrCode);
-  }, [billId, baseUrl]);
+    // Generate short bill ID hash
+    getShortBillId(billId)
+      .then((shortId) => {
+        setShortBillId(shortId);
+        const url = `${baseUrl || window.location.origin}/pay/${shortId}`;
+        setPaymentUrl(url);
+
+        // Generate branded QR with VeGate logo using SHORT bill ID
+        return generateBrandedQR(
+          shortId,
+          {
+            size: 512,
+            logo: '/vegate-logo.png', // VeGate logo from public folder
+            logoSize: 20, // 20% of QR size
+            errorCorrectionLevel: 'H', // High correction for logo
+            backgroundColor: '#FFFFFF',
+            foregroundColor: '#000000',
+          },
+          baseUrl
+        );
+      })
+      .then(setQrCode)
+      .catch((error) => {
+        console.error(
+          'Failed to generate branded QR, falling back to standard:',
+          error
+        );
+        // Fallback to standard QR if branded fails
+        import('@vegate/sdk').then(({ generateQR }) => {
+          generateQR(shortBillId, baseUrl).then(setQrCode);
+        });
+      });
+  }, [shortBillId, baseUrl]);
 
   const handleDownload = () => {
     if (qrCode) {
       downloadQR(qrCode, `vegate-bill-${billId.slice(0, 8)}.png`);
-      toast.success("QR code downloaded");
+      toast.success('QR code downloaded');
     }
   };
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(paymentUrl);
-    toast.success("Payment link copied");
+    toast.success('Payment link copied');
   };
 
   const handleShare = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "VeGate Payment",
-          text: "Pay with VeGate",
+          title: 'VeGate Payment',
+          text: 'Pay with VeGate',
           url: paymentUrl,
         });
       } catch (error) {
-        console.error("Share failed:", error);
+        console.error('Share failed:', error);
       }
     } else {
       handleCopyLink();
@@ -53,7 +85,11 @@ export function QRDisplay({ billId, baseUrl }: QRDisplayProps) {
       <CardContent className="pt-6">
         <div className="flex flex-col items-center space-y-4">
           {qrCode ? (
-            <img src={qrCode} alt="Payment QR Code" className="w-64 h-64 rounded-lg" />
+            <img
+              src={qrCode}
+              alt="Payment QR Code"
+              className="w-64 h-64 rounded-lg"
+            />
           ) : (
             <div className="w-64 h-64 bg-secondary animate-pulse rounded-lg" />
           )}

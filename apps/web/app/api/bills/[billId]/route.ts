@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@vegate/database";
-import { getBill as getOnChainBill } from "@vegate/sdk";
 
 const prisma = new PrismaClient();
 
@@ -27,15 +26,11 @@ export async function GET(
       );
     }
 
-    // Get on-chain data for verification
-    const onChainBill = await getOnChainBill(billId);
-
+    // Return database data
+    // On-chain data fetching should be done client-side
     return NextResponse.json({
       success: true,
-      bill: {
-        ...dbBill,
-        onChain: onChainBill,
-      },
+      bill: dbBill,
     });
   } catch (error) {
     console.error("Error fetching bill:", error);

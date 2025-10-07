@@ -12,20 +12,25 @@ import "./interfaces/IX2EarnRewardsPool.sol";
  * Supports fee delegation (VIP-191), B3TR rewards via VeBetterDAO, and social impact payments
  * 
  * Features:
+ * - NATIVE VET PAYMENTS ONLY (no token approvals needed!)
  * - Automatic 1 B3TR reward per successful payment
  * - 2x rewards (2 B3TR) for social impact payments
  * - Direct integration with VeBetterDAO X2EarnRewardsPool
  * - No backend API required - fully on-chain
+ * - Simple, secure, and gas-efficient
  * 
  * @author VeGate Team
  */
 contract VeGate is ReentrancyGuard, AccessControl {
     bytes32 public constant SPONSOR_ROLE = keccak256("SPONSOR_ROLE");
     bytes32 public constant MERCHANT_ROLE = keccak256("MERCHANT_ROLE");
+    
+    // VET token address (address(0) represents native VET)
+    address public constant VET_TOKEN = address(0);
 
     struct Bill {
         address receiver;
-        address token; // Token contract address
+        address token; // Must always be address(0) for VET
         uint256 amount;
         bool paid;
         bool socialImpact; // Donation/impact payment flag
@@ -106,6 +111,9 @@ contract VeGate is ReentrancyGuard, AccessControl {
     error TransferFailed();
     error Unauthorized();
     error InvalidCategory();
+    error OnlyVETAccepted();
+    error IncorrectVETAmount();
+    error InvalidReceiver();
 
     /**
      * @dev Constructor
@@ -125,8 +133,8 @@ contract VeGate is ReentrancyGuard, AccessControl {
     /**
      * @dev Create a new bill with unique ID
      * @param billId Unique identifier for the bill
-     * @param token Token address
-     * @param amount Amount to be paid
+     * @param token Token address (MUST be address(0) for VET)
+     * @param amount Amount to be paid in VET (wei)
      * @param socialImpact Whether this is a donation/impact payment
      * @param category Bill category (Donation, Subscription, E-commerce, Utility)
      */
@@ -137,19 +145,29 @@ contract VeGate is ReentrancyGuard, AccessControl {
         bool socialImpact,
         string calldata category
     ) external {
+        // CHECK 1: Bill must not already exist
         if (bills[billId].receiver != address(0)) {
             revert BillAlreadyExists();
         }
+        
+        // CHECK 2: Only VET is accepted (token must be address(0))
+        if (token != VET_TOKEN) {
+            revert OnlyVETAccepted();
+        }
+        
+        // CHECK 3: Amount must be greater than 0
         if (amount == 0) {
             revert InvalidAmount();
         }
+        
+        // CHECK 4: Category must be valid
         if (!_isValidCategory(category)) {
             revert InvalidCategory();
         }
 
         bills[billId] = Bill({
             receiver: msg.sender,
-            token: token,
+            token: VET_TOKEN, // Force VET token
             amount: amount,
             paid: false,
             socialImpact: socialImpact,
@@ -248,25 +266,51 @@ contract VeGate is ReentrancyGuard, AccessControl {
     }
 
     /**
-     * @dev Internal function to process bill payment
+     * @dev Internal function to process bill payment with VET
+     * Includes comprehensive checks for security and correctness
      */
     function _processBillPayment(bytes32 billId, address payer) internal {
         Bill storage bill = bills[billId];
         
+        // CHECK 1: Bill must exist
         if (bill.receiver == address(0)) {
             revert BillNotFound();
         }
+        
+        // CHECK 2: Bill must not be already paid
         if (bill.paid) {
             revert BillAlreadyPaid();
         }
-
-        // Transfer tokens
-        IERC20 token = IERC20(bill.token);
-        if (token.balanceOf(payer) < bill.amount) {
-            revert InsufficientBalance();
+        
+        // CHECK 3: Receiver must be valid
+        if (bill.receiver == address(0)) {
+            revert InvalidReceiver();
         }
         
-        bool success = token.transferFrom(payer, bill.receiver, bill.amount);
+        // CHECK 4: Only VET payments accepted
+        if (bill.token != VET_TOKEN) {
+            revert OnlyVETAccepted();
+        }
+        
+        // CHECK 5: msg.value must match bill amount exactly
+        if (msg.value != bill.amount) {
+            revert IncorrectVETAmount();
+        }
+        
+        // CHECK 6: Amount must be greater than 0
+        if (bill.amount == 0) {
+            revert InvalidAmount();
+        }
+        
+        // CHECK 7: Payer must not be the receiver (can't pay own bill)
+        if (payer == bill.receiver) {
+            revert Unauthorized();
+        }
+        
+        // Transfer VET to receiver
+        (bool success, ) = payable(bill.receiver).call{value: bill.amount}("");
+        
+        // CHECK 8: VET transfer must succeed
         if (!success) {
             revert TransferFailed();
         }
@@ -463,5 +507,14 @@ contract VeGate is ReentrancyGuard, AccessControl {
      */
     function removeSponsor(address sponsor) external onlyRole(DEFAULT_ADMIN_ROLE) {
         revokeRole(SPONSOR_ROLE, sponsor);
+    }
+
+    /**
+     * @dev Allow contract to receive VET for payment processing
+     * This is needed for VET bill payments
+     */
+    receive() external payable {
+        // Contract can receive VET
+        // VET will be forwarded to bill receivers during payment
     }
 }

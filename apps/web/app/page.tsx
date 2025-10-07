@@ -1,13 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
   QrCode,
@@ -19,15 +13,11 @@ import {
   Wallet,
   Check,
   Smartphone,
-  Lock,
   Gauge,
-  Globe,
   BookOpen,
   Code,
   ExternalLink,
   Users,
-  TrendingUp,
-  Clock,
   Award,
   Scan,
   Camera,
@@ -81,7 +71,7 @@ export default function HomePage() {
               </span>
               <br />
               <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground/90">
-                Gasless Payments on VeChainThor
+                Seamless Payments on VeChainThor
               </span>
             </h1>
 
@@ -112,7 +102,7 @@ export default function HomePage() {
                 next generation
               </span>{' '}
               of payments with{' '}
-              <span className="font-semibold text-primary">zero gas fees</span>,
+              <span className="font-semibold text-primary">minimal fees</span>,
               instant{' '}
               <span className="font-semibold text-primary">
                 QR code payments
@@ -127,7 +117,7 @@ export default function HomePage() {
                 <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
                   <Zap className="w-4 h-4 text-primary" />
                 </div>
-                <span>Zero Gas Fees</span>
+                <span>Lightning Fast</span>
               </div>
               <div className="flex items-center gap-2 text-sm font-medium">
                 <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center">
@@ -277,15 +267,15 @@ export default function HomePage() {
               <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-6">
                 <Zap className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-2xl font-bold mb-4">Zero Gas Fees</h3>
+              <h3 className="text-2xl font-bold mb-4">Minimal Fees</h3>
               <p className="text-muted-foreground mb-6">
-                Recipients pay without gas fees using our gasless payment system
-                on VeChainThor
+                Pay only ~0.02 VET (~$0.0002) per transaction on VeChainThor's
+                efficient blockchain
               </p>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start gap-2">
                   <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                  <span>No transaction costs</span>
+                  <span>Extremely low costs</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
@@ -418,7 +408,7 @@ export default function HomePage() {
               </div>
               <h3 className="text-2xl font-bold mb-4">Instant Payment</h3>
               <p className="text-muted-foreground">
-                Payer scans QR and pays instantly with zero gas fees
+                Payer scans QR and pays instantly with minimal transaction fees
               </p>
             </Card>
           </div>
@@ -633,18 +623,16 @@ export default function HomePage() {
                 </li>
               </ul>
               <div className="flex gap-3">
-                <Button variant="default" className="flex-1" asChild>
-                  <a
-                    href="https://github.com/your-org/vegate/tree/main/packages/sdk"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center"
-                  >
-                    <Code className="mr-2 h-4 w-4" />
-                    View SDK
-                    <ExternalLink className="ml-2 h-4 w-4" />
-                  </a>
-                </Button>
+                <a
+                  href="https://github.com/your-org/vegate/tree/main/packages/sdk"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white hover:bg-blue-700 h-10 px-4 py-2"
+                >
+                  <Code className="mr-2 h-4 w-4" />
+                  View SDK
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </a>
               </div>
             </Card>
 
@@ -676,18 +664,16 @@ export default function HomePage() {
                 </li>
               </ul>
               <div className="flex gap-3">
-                <Button variant="outline" className="flex-1" asChild>
-                  <a
-                    href="/docs"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center"
-                  >
-                    <BookOpen className="mr-2 h-4 w-4" />
-                    Read Docs
-                    <ExternalLink className="ml-2 h-4 w-4" />
-                  </a>
-                </Button>
+                <a
+                  href="/docs"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-transparent hover:bg-gray-100 h-10 px-4 py-2"
+                >
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  Read Docs
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </a>
               </div>
             </Card>
           </div>
@@ -738,7 +724,7 @@ export default function HomePage() {
             Ready to Transform Your Payments?
           </h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Join the revolution of gasless payments and experience the future
+            Join the revolution of blockchain payments and experience the future
             today
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">

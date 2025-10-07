@@ -11,6 +11,7 @@ datasource db {
 model Bill {
   id            String    @id @default(cuid())
   billId        String    @unique // On-chain bill ID (bytes32)
+  shortBillId   String    @unique // Short hash for URLs (8 chars)
   receiver      String
   token         String
   amount        String    // BigInt as string
@@ -37,6 +38,7 @@ model Bill {
   @@index([paid])
   @@index([socialImpact])
   @@index([category])
+  @@index([shortBillId])
 }
 
 model Payment {

@@ -1,22 +1,17 @@
 'use client';
 
-import { VeChainKitProvider } from '@vechain/vechain-kit';
-
+import { DAppKitProvider } from '@vechain/dapp-kit-react';
 
 export function VeChainProvider({ children }: { children: React.ReactNode }) {
   return (
-    <VeChainKitProvider
-      network={{ type: 'test' }}
-      feeDelegation={{
-        delegatorUrl: 'https://sponsor-testnet.vechain.energy/by/441',
-        delegateAllTransactions: false,
-      }}
-      loginMethods={[
-        { method: 'dappkit', gridColumn: 4 },
-      ]}
-      dappKit={{ allowedWallets: ['veworld'] }}
+    <DAppKitProvider
+      nodeUrl="https://testnet.vechain.org/"
+      genesis="test"
+      usePersistence
+      requireCertificate={false}
+      logLevel="DEBUG"
     >
       {children}
-    </VeChainKitProvider>
+    </DAppKitProvider>
   );
 }

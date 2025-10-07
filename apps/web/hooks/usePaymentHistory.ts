@@ -23,7 +23,7 @@ export function usePaymentHistory(filters?: PaymentHistoryFilters) {
       const params = new URLSearchParams({
         wallet: address,
         ...(filters?.status && filters.status !== "all" && { status: filters.status }),
-        ...(filters?.category && { category: filters.category }),
+        ...(filters?.category && filters.category !== "all" && { category: filters.category }),
         ...(filters?.socialImpact !== undefined && {
           socialImpact: String(filters.socialImpact),
         }),

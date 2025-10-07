@@ -1,27 +1,21 @@
 "use client";
 
-import { useWallet as useVeChainKitWallet } from "@vechain/vechain-kit";
+import { useWallet as useDAppKitWallet, useConnex } from "@vechain/dapp-kit-react";
 
 export function useWallet() {
-  const { account, connection } = useVeChainKitWallet();
-
-  // VeChain Kit injects connex into window when wallet is connected
-  const getConnex = () => {
-    if (typeof window !== 'undefined' && connection.isConnected) {
-      return (window as any).connex;
-    }
-    return null;
-  };
+  const { account, disconnect } = useDAppKitWallet();
+  const connex = useConnex();
 
   return {
-    address: account?.address || null,
-    balance: "0", // VeChain Kit manages balance internally
-    energy: "0", // VeChain Kit manages energy internally
+    address: account || null,
+    balance: "0", // Balance can be fetched separately if needed
+    energy: "0", // Energy can be fetched separately if needed
     isConnecting: false,
-    isConnected: connection.isConnected,
-    connex: getConnex(), // Expose connex for SDK usage
-    connect: async () => {}, // Handled by WalletButton
-    disconnect: () => {}, // Handled by WalletButton
-    refreshBalance: async () => {}, // Not needed with VeChain Kit
+    isConnected: !!account && !!connex,
+    connection: { isConnected: !!account && !!connex }, 
+    connex, // Connex instance from DAppKit
+    connect: async () => {}, // Handled by DAppKit modal
+    disconnect: disconnect,
+    refreshBalance: async () => {}, // Not needed with DAppKit
   };
 }

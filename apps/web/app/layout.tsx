@@ -94,7 +94,7 @@ export default function RootLayout({
                     Dashboard
                   </Link>
                   <Link
-                    href="https://github.com/your-org/vegate/tree/main/packages/sdk"
+                    href="https://www.npmjs.com/package/@trojan06/vegate-sdk"
                     target="_blank"
                     className="text-sm font-medium hover:text-primary transition-colors"
                   >

@@ -26,6 +26,11 @@
     "node": ">=18.0.0",
     "pnpm": ">=8.0.0"
   },
+  "pnpm": {
+    "overrides": {
+      "lucide-react": "0.263.1"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/your-org/vegate.git"

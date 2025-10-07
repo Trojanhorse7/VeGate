@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useBill } from '@/hooks/useBill';
 import { useWallet } from '@/hooks/useWallet';
 import { Button } from '@/components/ui/button';
@@ -45,13 +45,10 @@ export function CreateBillForm() {
       return;
     }
 
-    console.log('Submitting with address:', address);
-    console.log('Is connected:', isConnected);
-
     const bill = await create(formData);
     if (bill) {
-      // Redirect to QR page or show modal
-      window.location.href = `/bills/${bill.billId}`;
+      // Redirect to bill details using short ID
+      window.location.href = `/bills/${bill.shortBillId}`;
     }
   };
 
@@ -110,7 +107,7 @@ export function CreateBillForm() {
               }
             >
               <SelectTrigger>
-                <SelectValue children={''} />
+                <SelectValue placeholder="Select a category" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="E-commerce">E-commerce</SelectItem>
