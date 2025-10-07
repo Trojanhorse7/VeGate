@@ -624,7 +624,7 @@ export default function HomePage() {
               </ul>
               <div className="flex gap-3">
                 <a
-                  href="https://github.com/your-org/vegate/tree/main/packages/sdk"
+                  href="https://www.npmjs.com/package/vegate-sdk"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white hover:bg-blue-700 h-10 px-4 py-2"

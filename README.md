@@ -12,8 +12,8 @@
 
 VeGate is a modern payment infrastructure built on VeChainThor that enables seamless bill creation and payment with QR codes, minimal transaction fees, and automatic B3TR rewards from VeBetterDAO.
 
----
 
+---
 ## ✨ Features
 
 ### 🎯 Core Functionality
@@ -298,6 +298,7 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 - **GitHub:** [https://github.com/Trojanhorse7/VeGate](https://github.com/Trojanhorse7/VeGate)
 - **VeChain Explorer (Testnet):** [https://explore-testnet.vechain.org](https://explore-testnet.vechain.org)
 - **VeBetterDAO:** [https://vebetterdao.org](https://vebetterdao.org)
+- **VeGate SDK:** [VeGate SDK on npm](https://www.npmjs.com/package/vegate-sdk)
 
 ---
 
