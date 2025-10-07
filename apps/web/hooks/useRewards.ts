@@ -20,7 +20,7 @@ export function useRewards() {
 
     try {
       // Call SDK directly from client side
-      const rewardInfo = await getRewardInfo(address, "test");
+  const rewardInfo = await getRewardInfo(address, { network: "test" });
       setRewards(rewardInfo);
     } catch (error) {
       console.error("Failed to fetch rewards:", error);
