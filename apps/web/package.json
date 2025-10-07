@@ -6,10 +6,10 @@
   "description": "VeGate Web Application",
   "scripts": {
     "dev": "next dev",
-  "build": "next build --no-lint",
+  "build": "pnpm --filter @vegate/database prisma generate && next build --no-lint",
     "start": "next start",
     "lint": "next lint",
-  "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@chakra-ui/icons": "2.1.1",
@@ -26,7 +26,7 @@
     "@vechain/connex-framework": "^2.2.1",
     "@vechain/dapp-kit-react": "^1.0.12",
     "@vegate/database": "workspace:*",
-  "@vegate/sdk": "workspace:*",
+    "@vegate/sdk": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "ethers": "^5.8.0",
