@@ -5,7 +5,7 @@
   "description": "VeGate Web Application",
   "scripts": {
     "dev": "next dev",
-  "build": "next build --no-lint --no-typescript",
+  "build": "next build --no-lint",
     "start": "next start",
     "lint": "next lint",
   "type-check": "tsc --noEmit"
