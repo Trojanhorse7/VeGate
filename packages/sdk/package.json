@@ -1,0 +1,71 @@
+{
+  "name": "@vegate/sdk",
+  "version": "1.0.3",
+  "description": "VeGate SDK for payments on VeChainThor with B3TR rewards",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "prepublishOnly": "pnpm run build",
+    "lint": "eslint src",
+    "test": "jest",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "vegate",
+    "vechain",
+    "payment",
+    "qr-code",
+    "blockchain",
+    "web3",
+    "b3tr",
+    "rewards",
+    "gasless",
+    "sdk",
+    "vechainthor",
+    "dapp",
+    "crypto",
+    "payments"
+  ],
+  "author": "Trojanhorse7",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Trojanhorse7/VeGate.git",
+    "directory": "packages/sdk"
+  },
+  "bugs": {
+    "url": "https://github.com/Trojanhorse7/VeGate/issues"
+  },
+  "homepage": "https://github.com/Trojanhorse7/VeGate#readme",
+  "dependencies": {
+    "@vechain/connex": "^2.1.1",
+    "@vechain/connex-driver": "^2.1.1",
+    "@vechain/connex-framework": "^2.1.1",
+    "@vechain/sdk-core": "^1.2.0",
+    "ethers": "^5.7.2",
+    "qrcode": "^1.5.4",
+    "thor-devkit": "^2.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/qrcode": "^1.5.5",
+    "eslint": "^8.56.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0"
+  }
+}
