@@ -684,14 +684,14 @@ export default function HomePage() {
               <div className="bg-muted/50 rounded-lg p-6 text-left">
                 <code className="text-sm">
                   <div className="text-muted-foreground">
-                    // Install the SDK
+                    {/* Install the SDK */}
                   </div>
                   <div className="text-primary font-mono">
                     npm install @vegate/sdk
                   </div>
                   <br />
                   <div className="text-muted-foreground">
-                    // Create a payment
+                    {/* Create a payment */}
                   </div>
                   <div className="text-foreground font-mono">
                     <span className="text-purple-600">import</span> {'{'} VeGate{' '}
