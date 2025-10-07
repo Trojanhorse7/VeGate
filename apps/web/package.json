@@ -1,3 +1,4 @@
+ 
 {
   "name": "@vegate/web",
   "version": "1.0.0",
@@ -52,5 +53,10 @@
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.3.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client"
+    ]
   }
 }
