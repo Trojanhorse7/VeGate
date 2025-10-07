@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+  "type-check": "tsc --noEmit",
+  "postinstall": "prisma generate"
   },
   "dependencies": {
     "@chakra-ui/icons": "2.1.1",
@@ -25,7 +26,8 @@
     "@vechain/connex-framework": "^2.2.1",
     "@vechain/dapp-kit-react": "^1.0.12",
     "@vegate/database": "workspace:*",
-    "@vegate/sdk": "workspace:*",
+  "@vegate/sdk": "workspace:*",
+  "@prisma/client": "^5.8.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "ethers": "^5.8.0",
