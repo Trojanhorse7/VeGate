@@ -1,4 +1,7 @@
+
 # 🚪 VeGate
+
+[![NPM](https://img.shields.io/npm/v/vegate-sdk?color=cb3837&label=SDK%20on%20npm&logo=npm)](https://www.npmjs.com/package/vegate-sdk)
 
 > Seamless bill payments on VeChainThor with B3TR rewards
 
